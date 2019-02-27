@@ -1,0 +1,24 @@
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+  IMAGE_TAG: ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}
+  LATEST_IMAGE_TAG: ${CI_REGISTRY_IMAGE}:latest
+  TEST_CONTAINER_NAME: peckis-test:${CI_PIPELINE_ID}
+
+build:
+  stage: build
+  script:
+    - docker build -t ${IMAGE_TAG} .
+    - docker rmi ${IMAGE_TAG}
+
+test:
+  stage: test
+  script:
+    - docker run --rm ${IMAGE_TAG} /root/.poetry/bin/poetry run pytest
