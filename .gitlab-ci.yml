@@ -4,6 +4,7 @@ services:
 stages:
   - build
   - test
+  - clean-up
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -16,9 +17,13 @@ build:
   stage: build
   script:
     - docker build -t ${IMAGE_TAG} .
-    - docker rmi ${IMAGE_TAG}
 
 test:
   stage: test
   script:
-    - docker run --rm ${IMAGE_TAG} /root/.poetry/bin/poetry run pytest
+    - docker run -it --rm ${IMAGE_TAG} /root/.poetry/bin/poetry run pytest
+
+clean-up:
+  stage: clean-up
+  script:
+    - docker rmi ${IMAGE_TAG}
