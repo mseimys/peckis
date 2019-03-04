@@ -11,16 +11,18 @@ api = Blueprint("api", __name__)
 
 
 def allowed_file(filename):
-    return "." in filename and \
-           filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+    )
 
 
-@api.route("/") 
+@api.route("/")
 def index():
     return "Hello World! Make a POST request to /guess endpoint"
 
 
-@api.route("/guess", methods=["POST"]) 
+@api.route("/guess", methods=["POST"])
 def guess():
     if "image" not in request.files:
         abort(400)

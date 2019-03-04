@@ -21,7 +21,7 @@ build:
 test:
   stage: test
   script:
-    - docker run -it --rm ${IMAGE_TAG} /root/.poetry/bin/poetry run pytest
+    - docker run --rm ${IMAGE_TAG} /root/.poetry/bin/poetry run pytest --cov -v
 
 clean-up:
   stage: clean-up

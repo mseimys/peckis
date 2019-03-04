@@ -1,0 +1,13 @@
+.git
+.gitattributes
+.gitignore
+.gitmodules
+ci
+Dockerfile*
+
+*.db
+*.md
+*.yaml
+
+**/__pycache__
+*egg-info

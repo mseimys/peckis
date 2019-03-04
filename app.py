@@ -21,6 +21,7 @@ def create_app(test_config=None):
     initialize(app.config)
 
     from api import api
+
     app.register_blueprint(api)
 
     return app
