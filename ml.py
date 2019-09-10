@@ -1,21 +1,12 @@
 import sys
 
 from keras.preprocessing import image
-from keras.layers import Dense
-from keras.models import Sequential
-from keras.optimizers import SGD
 from PIL import Image
 import PIL.ImageOps
 
-model = Sequential()
-model.add(Dense(units=128, activation="relu", input_shape=(784,)))
-model.add(Dense(units=128, activation="relu"))
-model.add(Dense(units=128, activation="relu"))
-model.add(Dense(units=10, activation="softmax"))
+from models.numbers import NumberModel
 
-model.compile(optimizer=SGD(0.1), loss="categorical_crossentropy", metrics=["accuracy"])
-model.load_weights("numbers.h5")
-model._make_predict_function()
+model = NumberModel().initialize()
 
 
 def preprocess(filename):
@@ -31,6 +22,7 @@ def preprocess(filename):
     img = img.astype("float32") / 255
     img = img.reshape((1, 784))
     return img
+
 
 def guess_number(filename):
     print("Guessing", filename)
