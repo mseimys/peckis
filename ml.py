@@ -1,6 +1,6 @@
 import sys
 
-from keras.preprocessing import image
+import tensorflow as tf
 from PIL import Image
 import PIL.ImageOps
 
@@ -18,7 +18,7 @@ def preprocess(filename):
     img = PIL.ImageOps.invert(img).convert("L")
 
     img = img.resize((28, 28))
-    img = image.img_to_array(img)
+    img = tf.keras.preprocessing.image.img_to_array(img)
     img = img.astype("float32") / 255
     img = img.reshape((1, 784))
     return img

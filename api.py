@@ -2,7 +2,6 @@ import os
 from uuid import uuid4
 
 from flask import Blueprint, request, abort, jsonify, current_app as app
-from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 from ml import guess_number
@@ -11,10 +10,7 @@ api = Blueprint("api", __name__)
 
 
 def allowed_file(filename):
-    return (
-        "." in filename
-        and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
-    )
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
 
 
 @api.route("/")
