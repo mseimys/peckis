@@ -1,10 +1,12 @@
 import os
 from uuid import uuid4
 
+from celery.result import AsyncResult
 from flask import Blueprint, request, abort, jsonify, current_app as app
 from werkzeug.utils import secure_filename
 
-from ml import guess_number
+from app import celery
+from tasks import guess_number
 
 api = Blueprint("api", __name__)
 
@@ -32,4 +34,12 @@ def guess():
     full_path = os.path.join(app.config["UPLOAD_FOLDER"], uuid4().hex + "_" + filename)
     f.save(full_path)
 
-    return jsonify(guess_number(full_path))
+    job = guess_number.delay(full_path)
+    return jsonify(str(job))
+
+
+@api.route("/guess/<job_id>")
+def guess_job_result(job_id):
+    job = AsyncResult(id=job_id, app=celery)
+
+    return jsonify(dict(status=job.status, result=job.result))

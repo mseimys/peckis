@@ -1,5 +1,5 @@
 import io
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 import pytest
 import flask
@@ -22,11 +22,10 @@ def test_missing_image_returns_error(client):
 def test_correct_image_performs_number_guess(client, monkeypatch):
     file_mock = Mock(filename="image.png")
     mock_request = Mock(files={"image": file_mock})
-    mock_guess = Mock(return_value={"value": 5})
+    mock_guess = Mock(delay=Mock(return_value="TASK-ID"))
     with patch("api.guess_number", mock_guess):
         with patch("api.request", mock_request):
             res = client.post(url_for("api.guess"))
             assert res.status_code == 200
-            assert res.json == {"value": 5}
+            assert res.json == "TASK-ID"
             file_mock.save.assert_called_once()
-            mock_guess.assert_called_once()
