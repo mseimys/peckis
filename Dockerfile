@@ -1,13 +1,16 @@
 FROM python:3.6-slim
 
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends curl libglib2.0-0 libsm6 libxrender1 libxext6 build-essential python-dev
-RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+RUN apt-get install -y --no-install-recommends supervisor curl libglib2.0-0 libsm6 libxrender1 libxext6 build-essential python-dev
+RUN pip install poetry
 ENV LANG C.UTF-8
-WORKDIR /app
 
+WORKDIR /app
 ADD pyproject.toml poetry.lock ./
-RUN $HOME/.poetry/bin/poetry install --no-interaction
+RUN poetry install --no-interaction
+RUN poetry run pip install tensorflow==2.0.0b1
 
 ADD . .
-CMD $HOME/.poetry/bin/poetry run ./run.sh
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+EXPOSE 5000
+CMD ["/usr/bin/supervisord"]

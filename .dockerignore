@@ -11,3 +11,6 @@ Dockerfile*
 
 **/__pycache__
 *egg-info
+uploads
+.vscode
+.pytest_cache
