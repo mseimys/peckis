@@ -5,7 +5,7 @@ import numpy as np
 
 from .utils import cv2_clipped_zoom
 
-MODEL_LOCATION = "weights/numbers.h5"
+MODEL_SERVING_LOCATION = "serving/numbers/1/"
 
 
 class NumberModel(tf.keras.Sequential):
@@ -15,11 +15,6 @@ class NumberModel(tf.keras.Sequential):
         self.add(tf.keras.layers.Dense(units=128, activation="relu"))
         self.add(tf.keras.layers.Dense(units=128, activation="relu"))
         self.add(tf.keras.layers.Dense(units=10, activation="softmax"))
-
-    def initialize(self):
-        self.load_weights(MODEL_LOCATION)
-        self._make_predict_function()
-        return self
 
 
 def train_and_save_number_model(save_location):
@@ -63,8 +58,8 @@ def train_and_save_number_model(save_location):
 
     print("Model accuracy: ", accuracy[1])
 
-    model.save(save_location, save_format="h5")
+    model.save(save_location, save_format="tf")
 
 
 if __name__ == "__main__":
-    train_and_save_number_model(MODEL_LOCATION)
+    train_and_save_number_model(MODEL_SERVING_LOCATION)

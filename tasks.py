@@ -1,15 +1,14 @@
-import tensorflow as tf
-
+import requests
 from PIL import Image
 import PIL.ImageOps
 
 from app import celery
-from models.numbers import NumberModel
-
-model = NumberModel().initialize()
+from config import Config
 
 
 def preprocess(filename):
+    import tensorflow as tf
+
     png = Image.open(filename)
     png.load()
 
@@ -26,11 +25,10 @@ def preprocess(filename):
 
 @celery.task()
 def guess_number(filename):
-    print(f"Guessing {filename}")
-
     image = preprocess(filename)
-    img_class = model.predict_classes(image)
-    classname = img_class[0]
+    response = requests.post(Config.SERVING_NUMBER, json={"instances": image.tolist()})
+    predictions = response.json().get("predictions", [])[0]
+    classname = predictions.index(max(predictions))
 
     print(f"My guess is {classname}")
     return int(classname)
