@@ -1,0 +1,4 @@
+FROM tensorflow/serving
+ENV MODEL_NAME number
+ADD ./serving /models
+EXPOSE 8501
