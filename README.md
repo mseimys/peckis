@@ -41,6 +41,7 @@ docker network create peckis
 Build tensorflow/serving docker image and run it:
 
 ```
+# Remember to train your model first
 docker build -t serving -f Dockerfile.serving .
 docker run --rm -it --network peckis --name peckis-serving serving
 ```
@@ -55,6 +56,6 @@ docker run --rm -it -p 5000:5000 --network peckis -e SERVING_HOST=http://peckis-
 Build and run peckis UI:
 
 ```
-docker build --build-arg GUESS_API="http://localhost:5000/guess" -t peckis-ui .
-docker run --rm -it -p 3000:80 peckis-ui
+docker build --build-arg GUESS_API="https://seimys.com/peckis/api/guess" --build-arg PUBLIC_URL="/peckis" -t peckis-ui .
+docker run --rm -it -p 8000:80 peckis-ui
 ```
